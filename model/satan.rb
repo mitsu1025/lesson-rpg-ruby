@@ -6,18 +6,12 @@ class Satan < Actor
   attr_accessor :magic_skill
 
   def attack
-    if !@magic_skill.nil?
-      random = Random.new(hp).rand(5)
-      if random == 4
-        self.mp -= @magic_skill.mp
-        if self.mp >= 0
-          { atk: @magic_skill.atk, msg: "#{name}は、#{@magic_skill.name}を放った！" }
-        else
-          super
-        end
-      else
-        super
-      end
+    return super if @magic_skill.nil?
+    return super if (self.mp - @magic_skill.mp) < 0
+    random = Random.new.rand(5)
+    if random == 4
+      self.mp -= @magic_skill.mp
+      { atk: @magic_skill.atk, msg: "☆☆☆☆☆#{name}は、#{@magic_skill.name}を放った！☆☆☆☆☆" }
     else
       super
     end
