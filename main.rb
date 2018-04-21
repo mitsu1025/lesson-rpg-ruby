@@ -20,7 +20,15 @@ end
 # ゆうしゃ は 装備品 を 調達した
 # 魔王 は 魔法 を 使える
 def scene_c
+  @hero = Hero.new('もよもと', 280, 10, 14, 5, 5)
+  @hero.weapon = Item.new('つるぎ', 10, 0)
+  @hero.armor = Item.new('よろい', 0, 5)
+  @hero.equip_weapon
+  @hero.equip_armor
 
+  @monster = Satan.new('りゅうおう', 300, 30, 12, 5, 6)
+  @magic = Magic.new('メラゾーマ', 70, 15)
+  @monster.magic_skill = @magic
 end
 
 # 魔王 と 勇者 は 回復魔法を覚えた
@@ -31,7 +39,8 @@ def scene_d
 end
 
 def main
-  scene_b
+  # scene_b
+  scene_c
   game = GameController.new(@hero, @monster)
   game.run
 end
