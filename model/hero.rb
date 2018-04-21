@@ -6,9 +6,6 @@ class Hero < Actor
   attr_accessor :weapon, :armor
 
   def attack
-    if !@weapon.nil? && !@weapon.empty?
-    else
-      super
-    end
+    return super if @weapon.nil?
   end
 end
