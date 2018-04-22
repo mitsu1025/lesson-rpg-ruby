@@ -5,8 +5,10 @@
 # ATK   攻撃力
 # DEF   守備力
 # SPD   はやさ
+# MAX_HP  最大体力
+# MAX_MP  最大魔力
 class Actor
-  attr_reader :name, :atk, :defe, :spd
+  attr_reader :name, :atk, :defe, :spd, :max_hp, :max_mp
   attr_accessor :hp, :mp
 
   def initialize(name, hp, mp, atk, defe, spd)
@@ -16,6 +18,8 @@ class Actor
     @atk = atk
     @defe = defe
     @spd = spd
+    @max_hp = hp
+    @max_mp = mp
   end
 
   def attack

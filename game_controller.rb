@@ -32,8 +32,12 @@ class GameController
 
   def attack_faith(attacker, defencer, turn)
     status = attacker.attack
-    damege = [status[:atk] - defencer.defe, 0].max
-    def_msg = defencer.defence(damege)
+    if status[:atk].nil?
+      def_msg = "#{attacker.name}は体力を回復した。(HP:#{attacker.hp} MP:#{attacker.mp})"
+    else
+      damege = [status[:atk] - defencer.defe, 0].max
+      def_msg = defencer.defence(damege)
+    end
     broadcastingan(status[:msg], def_msg, turn)
   end
 
