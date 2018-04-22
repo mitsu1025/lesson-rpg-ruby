@@ -11,6 +11,18 @@ class Hero < Actor
     @physical_defe = defe
   end
 
+  def attack
+    return super if @weapon.nil?
+    { atk: @atk, msg: "#{name}は、#{@weapon.name}で殴りかかった！" }
+  end
+
+  def equip
+    equip_weapon
+    equip_armor
+  end
+
+  private
+
   def equip_weapon
     return @atk = @physical_atk if @weapon.nil?
     @atk = @physical_atk + @weapon.atk
@@ -21,10 +33,5 @@ class Hero < Actor
     return @defe = @physical_defe if @armor.nil?
     @defe = @physical_defe + @armor.defe
     p "#{name}は#{@armor.name}を装備した。(守備力:#{@physical_defe}->#{defe})"
-  end
-
-  def attack
-    return super if @weapon.nil?
-    { atk: @atk, msg: "#{name}は、#{@weapon.name}で殴りかかった！" }
   end
 end

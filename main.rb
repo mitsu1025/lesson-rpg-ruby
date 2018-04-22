@@ -23,8 +23,7 @@ def scene_c
   @hero = Hero.new('もよもと', 280, 10, 14, 5, 5)
   @hero.weapon = Item.new('つるぎ', 10, 0)
   @hero.armor = Item.new('よろい', 0, 5)
-  @hero.equip_weapon
-  @hero.equip_armor
+  @hero.equip
 
   @monster = Satan.new('りゅうおう', 300, 30, 12, 5, 6)
   @magic = Magic.new('メラゾーマ', 70, 15)
