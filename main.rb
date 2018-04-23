@@ -47,6 +47,7 @@ def scene_d
 end
 
 def main
+  # scene_a
   # scene_b
   # scene_c
   scene_d

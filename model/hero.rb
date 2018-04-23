@@ -17,7 +17,7 @@ class Hero < Actor
       if random == 4
         self.mp -= @recovery_magic.mp
         self.hp = [@recovery_magic.hp + self.hp, self.max_hp].min
-        return { atk: nil, msg: "#{name}は、#{@recovery_magic.name}を唱え、体力を回復した。(HP:#{self.hp} MP:#{self.mp})"}
+        return { atk: nil, msg: "♡♡#{name}は、#{@recovery_magic.name}を唱え、体力を回復した。(HP:#{self.hp} MP:#{self.mp})♡♡"}
       end
     end
 
