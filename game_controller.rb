@@ -32,8 +32,11 @@ class GameController
 
   def attack_faith(attacker, defencer, turn)
     status = attacker.attack
-    damege = [status[:atk] - defencer.defe, 0].max
-    def_msg = defencer.defence(damege)
+    def_msg = ""
+    if !status[:atk].nil?
+      damege = [status[:atk] - defencer.defe, 0].max
+      def_msg = defencer.defence(damege)
+    end
     broadcastingan(status[:msg], def_msg, turn)
   end
 
@@ -47,6 +50,6 @@ class GameController
   def broadcastingan(atk_msg, def_msg, turn)
     p "#-----#{turn}ターン-----#"
     p atk_msg
-    p def_msg
+    p def_msg if !def_msg.empty?
   end
 end
