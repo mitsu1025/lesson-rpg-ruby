@@ -12,7 +12,7 @@ class RecoveryMagic
   attr_reader :name, :hp, :mp
   def initialize(name, hp, mp)
     @name = name
-    @mp = mp
     @hp = hp
+    @mp = mp
   end
 end
