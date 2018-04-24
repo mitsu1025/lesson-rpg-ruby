@@ -47,6 +47,10 @@ def scene_d
   @monster.recovery_magic = RecoveryMagic.new('ホイミ', 30, 3)
 end
 
+# 魔王 と 勇者 は 回復魔法を覚えた
+# ゆうしゃ は 装備品 を 調達した
+# 魔王 は 魔法 を 使える
+# 複数の敵と戦う
 def scene_ex_a
   #勇者側セッティング
   @hero = Hero.new('もよもと', 280, 10, 14, 5, 5, "hero")
@@ -69,7 +73,6 @@ def main
   # scene_a
   scene_ex_a
   game = GameController.new(@hero, @monster)
-  # game2 = GameController2.new(@hero, @monsters)
   game.run
 end
 

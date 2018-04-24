@@ -12,7 +12,7 @@ class Actor
   attr_reader :name, :atk, :defe, :spd, :max_hp, :max_mp, :team
   attr_accessor :hp, :mp
 
-  def initialize(name, hp, mp, atk, defe, spd, team=nil)
+  def initialize(name, hp, mp, atk, defe, spd, team = nil)
     @name = name
     @hp = hp
     @mp = mp

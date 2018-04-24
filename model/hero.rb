@@ -1,5 +1,5 @@
 # encoding: utf-8
-# MODE    自動(A) or 手動操作(M)の識別子
+# MODE    A:自動  M:手動操作
 require_relative './actor'
 require_relative './item'
 
@@ -7,7 +7,7 @@ class Hero < Actor
   attr_reader :physical_atk, :physical_defe
   attr_accessor :weapon, :armor, :recovery_magic, :mode
 
-  def initialize(name, hp, mp, atk, defe, spd, team=nil)
+  def initialize(name, hp, mp, atk, defe, spd, team = nil)
     super
     @physical_atk = atk
     @physical_defe = defe
