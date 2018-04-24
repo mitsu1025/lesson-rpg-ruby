@@ -9,17 +9,35 @@ class GameController
   end
 
   def run
-    # 先行，後攻きめ
-    playears = [@hero, @monster].sort! do |a, b|
+    # 全キャラクターを同一配列にを格納
+    if @monster.kind_of?(Array)
+      players = [@hero]
+      i = 0
+      while !@monster[i].nil?
+        players.push(@monster[i])
+        i += 1
+      end
+    else
+      players = [@hero, @monster]
+    end
+
+    # 行動順決め(spd順に並び替え)
+    # players = players.sort! do |a, b|
+    players.sort! do |a, b|
       b.spd <=> a.spd
     end
 
+    ### 残作業用メモ
+    ## ・monster側とhero側でチーム分け
+    ## ・ゲームセット判定条件の見直し
+
+
     # 終了を満たすまで繰り返し
     turn = 0
-    until gameset?(playears)
+    until gameset?(players)
       turn += 1
-      playears.each do |player|
-        enemies = playears - [player]
+      players.each do |player|
+        enemies = players - [player]
         # FIXME: 複数の敵を考慮する
         enemy = enemies[0]
         attack_faith(player, enemy, turn)
