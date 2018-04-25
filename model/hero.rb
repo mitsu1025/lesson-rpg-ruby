@@ -1,18 +1,20 @@
 # encoding: utf-8
+# MODE    A:自動  M:手動操作
 require_relative './actor'
 require_relative './item'
 
 class Hero < Actor
-  attr_accessor :weapon, :armor, :recovery_magic
+  attr_reader :physical_atk, :physical_defe
+  attr_accessor :weapon, :armor, :recovery_magic, :mode
 
-  def initialize(name, hp, mp, atk, defe, spd)
+  def initialize(name, hp, mp, atk, defe, spd, team = nil)
     super
     @physical_atk = atk
     @physical_defe = defe
   end
 
   def attack
-    if can_use_recovery_magic? 
+    if can_use_recovery_magic?
       random = Random.new.rand(5)
       if random == 4
         self.mp -= @recovery_magic.mp

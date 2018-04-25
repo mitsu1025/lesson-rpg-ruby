@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+# require './game_controller'
 require './game_controller'
 Dir['./model/*.rb'].each { |file| require file }
 
@@ -46,11 +47,31 @@ def scene_d
   @monster.recovery_magic = RecoveryMagic.new('ホイミ', 30, 3)
 end
 
+# 魔王 と 勇者 は 回復魔法を覚えた
+# ゆうしゃ は 装備品 を 調達した
+# 魔王 は 魔法 を 使える
+# 複数の敵と戦う
+def scene_ex_a
+  #勇者側セッティング
+  @hero = Hero.new('もよもと', 280, 10, 14, 5, 5, "hero")
+  @hero.weapon = Item.new('鉄のつるぎ', 15, 0)
+  @hero.armor = Item.new('よろい', 0, 5)
+  @hero.recovery_magic = RecoveryMagic.new('ホイミ', 30, 3)
+  @hero.equip
+
+  #モンスター側セッティング
+  @satan = Satan.new('シドー', 300, 40, 25, 5, 6, "monster")
+  @magic = Magic.new('メラゾーマ', 70, 15)
+  @satan.magic_skill = @magic
+  @satan.recovery_magic = RecoveryMagic.new('ホイミ', 30, 3)
+
+  @slime = Actor.new('スライムベス', 88, 9, 12, 4, 4, "monster")
+  @monster = [@satan, @slime]
+end
+
 def main
   # scene_a
-  # scene_b
-  # scene_c
-  scene_d
+  scene_ex_a
   game = GameController.new(@hero, @monster)
   game.run
 end
