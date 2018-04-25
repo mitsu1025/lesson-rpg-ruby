@@ -9,7 +9,7 @@ class GameController
     @players = []
 
     @hero.team = "hero" if @hero.team.nil?
-    # @hero.mode = "auto" if hero.mode.nil?
+    @hero.mode = "auto" if hero.mode.nil?
     @players.push(@hero)
 
     if @monster.kind_of?(Array)
@@ -33,6 +33,7 @@ class GameController
       b.spd <=> a.spd
     end
 
+    system('clear')
     # 終了を満たすまで繰り返し
     turn = 0
     until gameset?(players)
@@ -46,10 +47,51 @@ class GameController
           end
         end
 
+        # 勇者がプレーヤー操作の場合
+        if player.team == "hero" && player.mode == "manual"
+          # 自分と敵のステータスを表示
+          puts "\n[-------------------------------------------------]"
+          puts "[#{player.name}]  HP: #{player.hp}, MP: #{player.mp}"
+          puts "[Enemy list]"
+          enemy_num = 0
+          enemies.each do |enemy|
+            puts " No.[#{enemy_num}] #{enemy.name} (HP: #{enemy.hp})"
+            enemy_num += 1
+          end
+          puts ""
+
+          #### 行動入力パターン
+          # 1. 攻撃する相手を選んで攻撃する。 →　敵の番号を入力 (0～)
+          # 2. 回復魔法を唱える
+          # 3. 逃げる(強制終了) → "escape"
+
+          puts "[command list]"
+          num = 0
+          enemies.each do |enemy|
+            puts "[#{num}] #{enemy.name} を攻撃する"
+            num += 1
+          end
+          puts "[#{num}] #{player.recovery_magic.name} を唱える。" if player.can_use_recovery_magic?
+          puts "[#{num+1}] 逃げる。"
+
+          print "行動入力:"
+          order = gets.chomp()
+          order = order.to_i
+          p order
+          puts ""
+
+          # enemyを選択
+          enemy = enemies[order]
+        else
+          num = [enemies.length, 1].max
+          random = Random.new.rand(num)
+          enemy = enemies[random]
+        end
+
         # 攻撃する敵をランダムで選ぶ
-        num = [enemies.length, 1].max
-        random = Random.new.rand(num)
-        enemy = enemies[random]
+        # num = [enemies.length, 1].max
+        # random = Random.new.rand(num)
+        # enemy = enemies[random]
 
         attack_faith(player, enemy, turn)
       end
@@ -88,12 +130,9 @@ class GameController
     p def_msg if !def_msg.empty?
   end
 
-  def manual_mode_broadcastingan(atk_msg, def_msg, turn)
-  end
-
   def enemy?(suspect, player)
     return false if suspect.hp <= 0
-    if !suspect.team.nil? ||  !player.team.nil?
+    if !suspect.team.nil? || !player.team.nil?
       return false if suspect.team == player.team
     end
     true

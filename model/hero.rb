@@ -32,6 +32,18 @@ class Hero < Actor
     equip_armor
   end
 
+  def can_use_recovery_magic?
+    return false if @recovery_magic.nil?
+    return false if (@mp - @recovery_magic.mp) < 0
+    true
+  end
+
+  def use_recovery_magic
+    self.mp -= @recovery_magic.mp
+    self.hp = [@recovery_magic.hp + self.hp, self.max_hp].min
+    { atk: nil, msg: "♡♡#{name}は、#{@recovery_magic.name}を唱え、体力を回復した。(HP:#{self.hp} MP:#{self.mp})♡♡"}
+  end
+
   private
 
   def equip_weapon
@@ -44,11 +56,5 @@ class Hero < Actor
     return @defe = @physical_defe if @armor.nil?
     @defe = @physical_defe + @armor.defe
     p "#{name}は#{@armor.name}を装備した。(守備力:#{@physical_defe}->#{defe})"
-  end
-
-  def can_use_recovery_magic?
-    return false if @recovery_magic.nil?
-    return false if (@mp - @recovery_magic.mp) < 0
-    true
   end
 end
