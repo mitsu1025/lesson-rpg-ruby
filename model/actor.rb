@@ -9,8 +9,8 @@
 # MAX_MP  最大魔力
 # team   敵味方の識別子
 class Actor
-  attr_reader :name, :atk, :defe, :spd, :max_hp, :max_mp, :team
-  attr_accessor :hp, :mp
+  attr_reader :name, :atk, :defe, :spd, :max_hp, :max_mp
+  attr_accessor :hp, :mp, :team
 
   def initialize(name, hp, mp, atk, defe, spd, team = nil)
     @name = name

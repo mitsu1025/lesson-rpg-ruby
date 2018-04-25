@@ -6,26 +6,32 @@ class GameController
   def initialize(hero, monster)
     @hero = hero
     @monster = monster
+    @players = []
+
+    @hero.team = "hero" if @hero.team.nil?
+    # @hero.mode = "auto" if hero.mode.nil?
+    @players.push(@hero)
+
+    if @monster.kind_of?(Array)
+      @monster.each do |m|
+        m.team = "monster" if m.team.nil?
+        @players.push(m)
+      end
+    else
+      @monster.team = "monster" if @monster.team.nil?
+      @players.push(@monster)
+    end
+
+    @teams = extract_team(@players)
   end
 
   def run
-    # 全キャラクターを同一配列にを格納
-    if @monster.kind_of?(Array)
-      players = [@hero]
-      @monster.each do |monster|
-        players.push(monster)
-      end
-    else
-      players = [@hero, @monster]
-    end
+    players = @players
 
     # 行動順決め(spd順に並び替え)
     players.sort! do |a, b|
       b.spd <=> a.spd
     end
-
-    ### 残作業用メモ
-    ## ・ゲームセット判定条件の見直し
 
     # 終了を満たすまで繰り返し
     turn = 0
@@ -40,12 +46,12 @@ class GameController
           end
         end
 
-        # 攻撃する相手をランダムで選ぶ
-        random = Random.new.rand(enemies.length)
+        # 攻撃する敵をランダムで選ぶ
+        num = [enemies.length, 1].max
+        random = Random.new.rand(num)
         enemy = enemies[random]
 
         attack_faith(player, enemy, turn)
-        # break if enemy.hp <= 0
       end
     end
   end
@@ -64,13 +70,7 @@ class GameController
 
   def gameset?(players)
     # true条件：同一チームの全てのメンバーのHPが0以下になる
-    teams = []
-    players.each do |player|
-      teams.push(player.team)
-    end
-    teams.uniq!
-
-    teams.each do |team|
+    @teams.each do |team|
       hps = []
       players.each do |player|
         if team == player.team
@@ -97,5 +97,13 @@ class GameController
       return false if suspect.team == player.team
     end
     true
+  end
+
+  def extract_team(players)
+    teams = []
+    players.each do |player|
+      teams.push(player.team)
+    end
+    teams.uniq
   end
 end
