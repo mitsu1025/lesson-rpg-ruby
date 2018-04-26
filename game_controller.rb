@@ -7,9 +7,6 @@ class GameController
     @hero = hero
     @monster = monster
     @players = []
-
-    @hero.team = "hero" if @hero.team.nil?
-    @hero.mode = "auto" if hero.mode.nil?
     @players.push(@hero)
 
     if @monster.kind_of?(Array)
@@ -39,7 +36,7 @@ class GameController
     until gameset?(players)
       turn += 1
       players.each do |player|
-        break if player.hp <= 0
+        next if player.hp <= 0
         enemies = []
         (players - [player]).each do |suspect|
           if enemy?(suspect, player)
@@ -47,22 +44,20 @@ class GameController
           end
         end
 
-        if player.team == "hero" && player.mode == "manual"
-          # 勇者がプレーヤー操作の場合
+        if (player.kind_of?(Hero) && player.mode == "manual")
           show_status(player)
           show_enemy_list(enemies)
           show_command_list(player, enemies)
 
           enemies_num = count_enemies(enemies)
           while true
-            print "行動入力:"
+            print "コマンド入力:"
             order = gets.chomp()
             break if correct_order?(order, enemies_num, player)
           end
           puts ""
 
           set_command(player, order)
-          # enemyを選択
           enemy = enemies[order.to_i]
         else
           num = [enemies.length, 1].max
@@ -71,6 +66,7 @@ class GameController
         end
 
         attack_faith(player, enemy, turn)
+        break if gameset?(players)
       end
     end
   end
@@ -132,6 +128,7 @@ class GameController
   end
 
   def correct_order?(order, enemies_num, player)
+    # String.to_i 対策 (文字列にto_iを使用すると返り値が0)
     return true if order == "0"
     # 逃げるコマンド
     return true if order == "."
@@ -142,15 +139,17 @@ class GameController
   end
 
   def show_status(player)
-    puts "\n-------------------------------------------------"
-    puts "#{player.name}\n HP:#{player.hp}\n MP:#{player.mp}\n\n"
+    puts "\n/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-"
+    puts "[Player Status]"
+    puts " #{player.name}\n HP:#{player.hp}\n MP:#{player.mp}\n\n"
   end
 
   def show_enemy_list(enemies)
     puts "[Enemies List]"
     enemy_num = 0
     enemies.each do |enemy|
-      puts " No.#{enemy_num} #{enemy.name} (HP: #{enemy.hp})"
+      tab = "\t" if enemy.name.length < 5
+      puts " No.#{enemy_num} #{enemy.name}#{tab}\t(HP:#{enemy.hp})"
       enemy_num += 1
     end
     puts ""

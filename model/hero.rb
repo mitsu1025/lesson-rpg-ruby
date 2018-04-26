@@ -11,21 +11,20 @@ class Hero < Actor
     super
     @physical_atk = atk
     @physical_defe = defe
+    @mode = "auto"
+    @team = "hero" if team.nil?
   end
 
   def attack
     if self.mode == "manual"
-      if self.command == "attack"
-        return super if @weapon.nil?
-        return { atk: @atk, msg: "#{name}は、#{@weapon.name}で殴りかかった！" }
-      elsif self.command == "recovery_magic"
-        return use_recovery_magic
-      end
-    elsif
-      random = Random.new.rand(5)
-      if random == 4 && can_use_recovery_magic?
-        return use_recovery_magic
-      end
+      return use_recovery_magic if self.command == "recovery_magic"
+      return super if(self.command == "attack" && @weapon.nil?)
+      return { atk: @atk, msg: "#{name}は、#{@weapon.name}で殴りかかった！" }
+    end
+
+    random = Random.new.rand(5)
+    if random == 4 && can_use_recovery_magic?
+      return use_recovery_magic
     end
     return super if @weapon.nil?
     { atk: @atk, msg: "#{name}は、#{@weapon.name}で殴りかかった！" }

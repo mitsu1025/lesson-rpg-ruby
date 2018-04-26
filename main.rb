@@ -72,26 +72,27 @@ end
 # 勇者の行動をプレーヤーが操作
 def scene_ex_b
   #勇者側セッティング
-  @hero = Hero.new('もよもと', 280, 10, 14, 5, 5, "hero")
-  @hero.weapon = Item.new('鉄のつるぎ', 20, 0)
-  @hero.armor = Item.new('よろい', 0, 5)
-  @hero.recovery_magic = RecoveryMagic.new('ホイミ', 30, 3)
+  @hero = Hero.new('もよもと', 280, 20, 14, 5, 7, "hero")
+  @hero.weapon = Item.new('ロトのつるぎ', 30, 0)
+  @hero.armor = Item.new('ロトのよろい', 0, 12)
+  @hero.recovery_magic = RecoveryMagic.new('ベホイミ', 60, 5)
   @hero.mode = "manual"
   @hero.equip
 
   #モンスター側セッティング
-  @satan = Satan.new('シドー', 300, 40, 25, 5, 6, "monster")
-  @magic = Magic.new('メラゾーマ', 70, 15)
+  @satan = Satan.new('ハーゴン', 300, 60, 25, 5, 6, "monster")
+  @magic = Magic.new('イオナズン', 80, 20)
   @satan.magic_skill = @magic
-  @satan.recovery_magic = RecoveryMagic.new('ホイミ', 30, 3)
+  @satan.recovery_magic = RecoveryMagic.new('ベホイミ', 60, 5)
 
-  @slime = Actor.new('スライム', 88, 9, 9, 3, 2)
-  @slime2 = Actor.new('スライムベス', 88, 9, 12, 4, 4, "monster")
-  @monster = [@satan, @slime, @slime2]
+  @slime = Actor.new('スライムベス', 88, 9, 12, 4, 4, "monster")
+  @dragon = Actor.new('ドラゴン', 120, 0, 20, 6, 5, "monster")
+  @cyclops = Actor.new('サイクロプス', 200, 0, 25, 3, 2, "monster")
+  @monster = [@satan, @slime, @dragon, @cyclops]
 end
 
 def main
-  # scene_a
+  # scene_d
   # scene_ex_a
   scene_ex_b
   game = GameController.new(@hero, @monster)
