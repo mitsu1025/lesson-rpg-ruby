@@ -7,12 +7,11 @@ class Hero < Actor
   attr_reader :physical_atk, :physical_defe
   attr_accessor :weapon, :armor, :recovery_magic, :mode, :command
 
-  def initialize(name, hp, mp, atk, defe, spd, team = nil)
+  def initialize(name, hp, mp, atk, defe, spd, team = "hero")
     super
     @physical_atk = atk
     @physical_defe = defe
     @mode = "auto"
-    @team = "hero" if team.nil?
   end
 
   def attack
@@ -40,7 +39,6 @@ class Hero < Actor
     return false if (@mp - @recovery_magic.mp) < 0
     true
   end
-
 
   private
 

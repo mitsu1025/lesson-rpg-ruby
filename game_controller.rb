@@ -49,14 +49,7 @@ class GameController
           show_enemy_list(enemies)
           show_command_list(player, enemies)
 
-          enemies_num = count_enemies(enemies)
-          while true
-            print "コマンド入力:"
-            order = gets.chomp()
-            break if correct_order?(order, enemies_num, player)
-          end
-          puts ""
-
+          order = gets_user_order(player, enemies)
           set_command(player, order)
           enemy = enemies[order.to_i]
         else
@@ -139,7 +132,7 @@ class GameController
   end
 
   def show_status(player)
-    puts "\n/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-"
+    puts "\n/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/"
     puts "[Player Status]"
     puts " #{player.name}\n HP:#{player.hp}\n MP:#{player.mp}\n\n"
   end
@@ -164,6 +157,17 @@ class GameController
     end
     puts " [r] #{player.recovery_magic.name} を唱える" if player.can_use_recovery_magic?
     puts " [.] 逃げる\n\n"
+  end
+
+  def gets_user_order(player, enemies)
+    enemies_num = count_enemies(enemies)
+    while true
+      print "コマンド入力:"
+      order = gets.chomp()
+      break if correct_order?(order, enemies_num, player)
+    end
+    puts ""
+    order
   end
 
   def set_command(player, order)
