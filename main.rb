@@ -39,7 +39,7 @@ def scene_d
   @hero.weapon = Item.new('つるぎ', 10, 0)
   @hero.armor = Item.new('よろい', 0, 5)
   @hero.recovery_magic = RecoveryMagic.new('ホイミ', 30, 3)
-  @hero.equip
+  # @hero.equip
 
   @monster = Satan.new('りゅうおう', 300, 30, 25, 5, 6)
   @magic = Magic.new('メラゾーマ', 70, 15)

@@ -5,7 +5,7 @@ require_relative './item'
 
 class Hero < Actor
   attr_reader :physical_atk, :physical_defe
-  attr_accessor :weapon, :armor, :recovery_magic, :mode
+  attr_accessor :weapon, :armor, :recovery_magic, :mode, :command
 
   def initialize(name, hp, mp, atk, defe, spd, team = nil)
     super
@@ -14,15 +14,19 @@ class Hero < Actor
   end
 
   def attack
-    if can_use_recovery_magic?
+    if self.mode == "manual"
+      if self.command == "attack"
+        return super if @weapon.nil?
+        return { atk: @atk, msg: "#{name}は、#{@weapon.name}で殴りかかった！" }
+      elsif self.command == "recovery_magic"
+        return use_recovery_magic
+      end
+    elsif
       random = Random.new.rand(5)
-      if random == 4
-        self.mp -= @recovery_magic.mp
-        self.hp = [@recovery_magic.hp + self.hp, self.max_hp].min
-        return { atk: nil, msg: "♡♡#{name}は、#{@recovery_magic.name}を唱え、体力を回復した。(HP:#{self.hp} MP:#{self.mp})♡♡"}
+      if random == 4 && can_use_recovery_magic?
+        return use_recovery_magic
       end
     end
-
     return super if @weapon.nil?
     { atk: @atk, msg: "#{name}は、#{@weapon.name}で殴りかかった！" }
   end
@@ -38,11 +42,6 @@ class Hero < Actor
     true
   end
 
-  def use_recovery_magic
-    self.mp -= @recovery_magic.mp
-    self.hp = [@recovery_magic.hp + self.hp, self.max_hp].min
-    { atk: nil, msg: "♡♡#{name}は、#{@recovery_magic.name}を唱え、体力を回復した。(HP:#{self.hp} MP:#{self.mp})♡♡"}
-  end
 
   private
 
@@ -56,5 +55,11 @@ class Hero < Actor
     return @defe = @physical_defe if @armor.nil?
     @defe = @physical_defe + @armor.defe
     p "#{name}は#{@armor.name}を装備した。(守備力:#{@physical_defe}->#{defe})"
+  end
+
+  def use_recovery_magic
+    self.mp -= @recovery_magic.mp
+    self.hp = [@recovery_magic.hp + self.hp, self.max_hp].min
+    { atk: nil, msg: "♡♡#{name}は、#{@recovery_magic.name}を唱え、体力を回復した。(HP:#{self.hp} MP:#{self.mp})♡♡"}
   end
 end

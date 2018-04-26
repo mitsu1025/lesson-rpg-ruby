@@ -47,51 +47,28 @@ class GameController
           end
         end
 
-        # 勇者がプレーヤー操作の場合
         if player.team == "hero" && player.mode == "manual"
-          # 自分と敵のステータスを表示
-          puts "\n[-------------------------------------------------]"
-          puts "[#{player.name}]  HP: #{player.hp}, MP: #{player.mp}"
-          puts "[Enemy list]"
-          enemy_num = 0
-          enemies.each do |enemy|
-            puts " No.[#{enemy_num}] #{enemy.name} (HP: #{enemy.hp})"
-            enemy_num += 1
+          # 勇者がプレーヤー操作の場合
+          show_status(player)
+          show_enemy_list(enemies)
+          show_command_list(player, enemies)
+
+          enemies_num = count_enemies(enemies)
+          while true
+            print "行動入力:"
+            order = gets.chomp()
+            break if correct_order?(order, enemies_num, player)
           end
           puts ""
 
-          #### 行動入力パターン
-          # 1. 攻撃する相手を選んで攻撃する。 →　敵の番号を入力 (0～)
-          # 2. 回復魔法を唱える
-          # 3. 逃げる(強制終了) → "escape"
-
-          puts "[command list]"
-          num = 0
-          enemies.each do |enemy|
-            puts "[#{num}] #{enemy.name} を攻撃する"
-            num += 1
-          end
-          puts "[#{num}] #{player.recovery_magic.name} を唱える。" if player.can_use_recovery_magic?
-          puts "[#{num+1}] 逃げる。"
-
-          print "行動入力:"
-          order = gets.chomp()
-          order = order.to_i
-          p order
-          puts ""
-
+          set_command(player, order)
           # enemyを選択
-          enemy = enemies[order]
+          enemy = enemies[order.to_i]
         else
           num = [enemies.length, 1].max
           random = Random.new.rand(num)
           enemy = enemies[random]
         end
-
-        # 攻撃する敵をランダムで選ぶ
-        # num = [enemies.length, 1].max
-        # random = Random.new.rand(num)
-        # enemy = enemies[random]
 
         attack_faith(player, enemy, turn)
       end
@@ -144,5 +121,60 @@ class GameController
       teams.push(player.team)
     end
     teams.uniq
+  end
+
+  def count_enemies(enemies)
+    num = 0
+    enemies.each do |enemy|
+      num += 1
+    end
+    num
+  end
+
+  def correct_order?(order, enemies_num, player)
+    return true if order == "0"
+    # 逃げるコマンド
+    return true if order == "."
+    # 回復魔法コマンド
+    return true if (order == "r" && player.can_use_recovery_magic?)
+    return true if (order.to_i > 0 && order.to_i < enemies_num)
+    false
+  end
+
+  def show_status(player)
+    puts "\n-------------------------------------------------"
+    puts "#{player.name}\n HP:#{player.hp}\n MP:#{player.mp}\n\n"
+  end
+
+  def show_enemy_list(enemies)
+    puts "[Enemies List]"
+    enemy_num = 0
+    enemies.each do |enemy|
+      puts " No.#{enemy_num} #{enemy.name} (HP: #{enemy.hp})"
+      enemy_num += 1
+    end
+    puts ""
+  end
+
+  def show_command_list(player, enemies)
+    puts "[Command List]"
+    num = 0
+    enemies.each do |enemy|
+      puts " [#{num}] \"#{enemy.name}\" を攻撃する"
+      num += 1
+    end
+    puts " [r] #{player.recovery_magic.name} を唱える" if player.can_use_recovery_magic?
+    puts " [.] 逃げる\n\n"
+  end
+
+  def set_command(player, order)
+    if order == "."
+      puts "#{player.name}は逃げ出した..."
+      exit
+    elsif order == "r"
+      player.command = "recovery_magic"
+    else
+      player.command = "attack"
+    end
   end
 end
