@@ -7,3 +7,12 @@ class Magic
     @mp = mp
   end
 end
+
+class RecoveryMagic
+  attr_reader :name, :hp, :mp
+  def initialize(name, hp, mp)
+    @name = name
+    @hp = hp
+    @mp = mp
+  end
+end
