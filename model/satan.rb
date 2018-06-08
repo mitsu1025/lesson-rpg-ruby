@@ -15,7 +15,7 @@ class Satan < Actor
       { atk: @magic_skill.atk, msg: "☆☆☆☆☆#{name}は、#{@magic_skill.name}を放った！☆☆☆☆☆" }
     elsif random == 5
       self.hp += @recover.hp
-      { msg: "*****#{name}は、#{@recover.name}を唱えた！*****"}
+      { atk: @magic_skill.atk, msg: "*****#{name}は、#{@recover.name}を唱えた！*****"}
     else
       super
     end
