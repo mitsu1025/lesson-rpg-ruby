@@ -34,7 +34,8 @@ class GameController
     status = attacker.attack
     damege = [status[:atk] - defencer.defe, 0].max
     def_msg = defencer.defence(damege)
-    broadcastingan(status[:msg], def_msg, turn)
+    def_ptc = defencer.ptc
+    broadcastingan(status[:msg], def_msg, def_ptc, turn)
   end
 
   def gameset?(players)
@@ -44,9 +45,10 @@ class GameController
     false
   end
 
-  def broadcastingan(atk_msg, def_msg, turn)
+  def broadcastingan(atk_msg, def_msg, def_ptc, turn)
     p "#-----#{turn}ターン-----#"
     p atk_msg
     p def_msg
+    p def_ptc
   end
 end
